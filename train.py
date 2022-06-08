@@ -17,6 +17,8 @@ class TrainEval():
   def __init__(self):
     self.model = models.resnet18()
     self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    if self.device == "cuda:0":
+      model.cuda()
     print(f'DEVICE :: [ {self.device} ]')
     self.classes = ('airplane','automobile','bird','cat','deer',
                     'dog','frog','horse','ship','truck')
