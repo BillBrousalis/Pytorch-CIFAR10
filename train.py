@@ -13,20 +13,18 @@ import util
 
 import matplotlib.pyplot as plt
 
-def TrainEval():
+class TrainEval():
   def __init__(self):
     self.model = models.resnet18()
-    print(f'DEVICE :: [ {device} ]')
     self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print(f'DEVICE :: [ {self.device} ]')
     self.classes = ('airplane','automobile','bird','cat','deer',
                     'dog','frog','horse','ship','truck')
     self.fname = "resnet18_sgd_lr0,01.pth"
-    self.train()
-    self.evaluate()
 
   def train(self):
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+    optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.9)
     batch_size = 128
     epochs = 100
 
@@ -46,7 +44,7 @@ def TrainEval():
     # graph
     x, y = [], []
 
-    for epoch in tqdm(epochs):
+    for epoch in tqdm(range(epochs)):
       print(f'[*] Epoch [ {epoch}/{epochs} ]')
       running_loss = 0.0
       avg_epoch_loss = 0.0
@@ -64,7 +62,7 @@ def TrainEval():
 
         # stats
         running_loss += loss.item()
-        avg_epoch_loss += loss.item
+        avg_epoch_loss += loss.item()
         if i % 2000 == 1999:
           print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
           running_loss = 0.0
@@ -77,17 +75,16 @@ def TrainEval():
       y.append(avg_epoch_loss)
 
     print('** DONE **')
-    torch.save(self.model.state_dict(), os.path.join("./trained_models/", self.fname)
-
+    torch.save(self.model.state_dict(), os.path.join("./trained_models/", self.fname))
     # graph
     fig, ax = plt.subplots()
     ax.plot(x, y)
     ax.set(xlabel="EPOCH #", ylabel="LOSS", title="Loss Graph")
     ax.grid()
-    fig.savefig(os.path.join("./trained_models/", f"{self.fname}.png")
+    fig.savefig(os.path.join("./trained_models/", f"{self.fname}.png"))
     plt.show()
 
-  def evaluate(self, self.fname):
+  def evaluate(self):
     batch_size = 100
     transform = transforms.Compose([
       transforms.ToTensor(),
@@ -114,6 +111,7 @@ def TrainEval():
     print(f'Accuracy of the network on the {len(test_data)} test images: {100 * correct / total} %')
 
 if __name__ == '__main__':
-  train()
-  evaluate()
+  x = TrainEval()
+  x.train()
+  x.evaluate()
 
