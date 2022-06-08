@@ -21,31 +21,11 @@ class Net(nn.Module):
     self.relu = nn.ReLU()
 
   def forward(self, x):
-    #print('1', x.shape)
     out = self.l1(x)
-
-    #print('2', out.shape)
     out = self.l2(out)
-
-    #print('3', out.shape)
     out = torch.flatten(out, 1)
-
-
-    #out = out.view(32*32*3, 1)
-
-    #print('4', out.shape)
     out = self.relu(self.fc1(out))
-
-    #print('5', out.shape)
     out = self.relu(self.fc2(out))
-
-    #print('6', out.shape)
     out = self.fc3(out)
-
-    '''
-    print('7', out.shape)
     out = torch.softmax(out)
-
-    print('8', out.shape)
-    '''
     return out
