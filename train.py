@@ -53,6 +53,7 @@ class TrainEval():
       for i, data in enumerate(trainloader):
         print(f"i={i}")
         inputs, labels = data
+        inputs, labels = inputs.to(self.device), labels.to(self.device)
 
         # zero-out the parameter gradients
         optimizer.zero_grad()
@@ -102,6 +103,7 @@ class TrainEval():
       self.model.load_state_dict(torch.load(os.path.join("./trained_models/", self.fname), map_location=torch.device('cpu')))
     else:
       self.model.load_state_dict(torch.load(os.path.join("./trained_models/", self.fname)))
+
     total, correct = 0, 0
     with torch.no_grad():
       for data in testloader:
