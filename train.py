@@ -48,10 +48,8 @@ class TrainEval():
 
     for epoch in tqdm(range(epochs)):
       print(f'[*] Epoch [ {epoch}/{epochs} ]')
-      running_loss = 0.0
       avg_epoch_loss = 0.0
       for i, data in enumerate(trainloader):
-        print(f"i={i}")
         inputs, labels = data
         inputs, labels = inputs.to(self.device), labels.to(self.device)
 
@@ -64,14 +62,10 @@ class TrainEval():
         optimizer.step()
 
         # stats
-        running_loss += loss.item()
         avg_epoch_loss += loss.item()
-        if i % 2000 == 1999:
-          print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
-          running_loss = 0.0
 
       avg_epoch_loss /= len(trainloader)
-      print("AVG_LOSS = {avg_epoch_loss}")
+      print(f"AVG_LOSS = {avg_epoch_loss}")
 
       # graph
       x.append(epoch+1)
