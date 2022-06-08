@@ -17,8 +17,8 @@ class TrainEval():
   def __init__(self):
     self.model = models.resnet18()
     self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    if self.device == "cuda:0":
-      model.cuda()
+    if self.device == torch.device("cuda:0"):
+      self.model.cuda()
     print(f'DEVICE :: [ {self.device} ]')
     self.classes = ('airplane','automobile','bird','cat','deer',
                     'dog','frog','horse','ship','truck')
@@ -102,6 +102,7 @@ class TrainEval():
     with torch.no_grad():
       for data in testloader:
         images, labels = data
+        images, labels = images.to(self.device), labels.to(self.device)
         outputs = self.model(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
@@ -110,6 +111,6 @@ class TrainEval():
 
 if __name__ == '__main__':
   x = TrainEval()
-  x.train()
+  #x.train()
   x.evaluate()
 
