@@ -15,18 +15,19 @@ import matplotlib.pyplot as plt
 
 class TrainEval():
   def __init__(self):
-    self.model = models.resnet18()
+    #self.model = models.resnet18()
+    self.model = models.vgg16()
     self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if self.device == torch.device("cuda:0"):
       self.model.cuda()
     print(f'DEVICE :: [ {self.device} ]')
     self.classes = ('airplane','automobile','bird','cat','deer',
                     'dog','frog','horse','ship','truck')
-    self.fname = "resnet18_sgd_lr0,01.pth"
+    self.fname = "vgg16_sgd_lr0,01.pth"
 
   def train(self):
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(self.model.parameters(), lr=0.03, momentum=0.9)
+    optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.9)
     batch_size = 128
     epochs = 100
 
@@ -47,7 +48,7 @@ class TrainEval():
     x, y = [], []
 
     for epoch in tqdm(range(epochs)):
-      print(f'[*] Epoch [ {epoch+1}/{epochs} ]')
+      print(f'[*] Epoch [ {epoch}/{epochs} ]')
       avg_epoch_loss = 0.0
       for i, data in enumerate(trainloader):
         inputs, labels = data
@@ -78,7 +79,8 @@ class TrainEval():
     ax.plot(x, y)
     ax.set(xlabel="EPOCH #", ylabel="LOSS", title="Loss Graph")
     ax.grid()
-    fig.savefig(os.path.join("./trained_models/", f"{self.fname.replace('.pth','')}.png"))
+    fig.savefig(os.path.join("./trained_models/", f"{self.fname}.png"))
+    plt.show()
 
   def evaluate(self):
     batch_size = 100
@@ -92,7 +94,7 @@ class TrainEval():
     testloader = DataLoader(test_data, batch_size=batch_size,
                             shuffle=True, num_workers=2)
     
-    if self.device == "cpu":
+    if self.device == torch.device("cpu"):
       self.model.load_state_dict(torch.load(os.path.join("./trained_models/", self.fname), map_location=torch.device('cpu')))
     else:
       self.model.load_state_dict(torch.load(os.path.join("./trained_models/", self.fname)))
