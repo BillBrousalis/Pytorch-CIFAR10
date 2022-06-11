@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 
 class TrainEval():
   def __init__(self):
-    #self.model = models.resnet18()
     self.model = models.vgg16()
     self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if self.device == torch.device("cuda:0"):
@@ -79,7 +78,7 @@ class TrainEval():
     ax.plot(x, y)
     ax.set(xlabel="EPOCH #", ylabel="LOSS", title="Loss Graph")
     ax.grid()
-    fig.savefig(os.path.join("./trained_models/", f"{self.fname}.png"))
+    fig.savefig(os.path.join("./trained_models/", f"{self.fname.replace('.pth','')}.png"))
     plt.show()
 
   def evaluate(self):
