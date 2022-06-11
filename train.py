@@ -26,7 +26,7 @@ class TrainEval():
 
   def train(self):
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(self.model.parameters(), lr=0.01, momentum=0.9)
+    optimizer = optim.SGD(self.model.parameters(), lr=0.03, momentum=0.9)
     batch_size = 128
     epochs = 100
 
@@ -47,7 +47,7 @@ class TrainEval():
     x, y = [], []
 
     for epoch in tqdm(range(epochs)):
-      print(f'[*] Epoch [ {epoch}/{epochs} ]')
+      print(f'[*] Epoch [ {epoch+1}/{epochs} ]')
       avg_epoch_loss = 0.0
       for i, data in enumerate(trainloader):
         inputs, labels = data
@@ -78,8 +78,7 @@ class TrainEval():
     ax.plot(x, y)
     ax.set(xlabel="EPOCH #", ylabel="LOSS", title="Loss Graph")
     ax.grid()
-    fig.savefig(os.path.join("./trained_models/", f"{self.fname}.png"))
-    plt.show()
+    fig.savefig(os.path.join("./trained_models/", f"{self.fname.replace('.pth','')}.png"))
 
   def evaluate(self):
     batch_size = 100
@@ -111,6 +110,6 @@ class TrainEval():
 
 if __name__ == '__main__':
   x = TrainEval()
-  #x.train()
+  x.train()
   x.evaluate()
 
